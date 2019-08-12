@@ -1,0 +1,45 @@
+<h1>Monday practicals</h1>
+
+<p>Topic: Imitation learning (behavioral cloning) in Doom.</p>
+
+<h2>Files</h2>
+
+<ul>
+<li>record_vizdoom.py: Record human gameplay in ViZDoom scenarios and store on disk (images, actions and reward).</li>
+<li>train_keras_imitation.py: Create neural networks with Keras and train on human data gathered with previous script.</li>
+<li>enjoy_keras_imitation.py: Enjoy/Evaluate trained models with previous script.</li>
+<li>enjoy_random.py: Enjoy/Evaluate random agent</li>
+</ul>
+
+
+<h2>Tasks</h2>
+
+<p>All coding tasks are marked with <code># TODO</code>s in the code.</p>
+
+<p>Playing game is done with arrow keys.</p>
+
+<ol>
+<li>Implement missing code in <code>record_vizdoom.py</code> and record data of yourself playing with <code>record_vizdoom.py</code>. Ten games should already work decently.</li>
+<li>Implement a simple Keras network in <code>train_keras_imitation.py</code>, e.g. two convolutional layers followed by a dense layer.
+See Keras documentation for help: https://keras.io/</li>
+<li>Train network to play like you with <code>train_keras_imitation.py</code>.</li>
+<li>See how well your agent does with <code>enjoy_keras_imitation.py</code>. You can also run code with <code>--evaluate</code> to get more objective results.</li>
+<li>Implement random actions in <code>enjoy_random.py</code> (each step, each button is randomly pressed (1) or not (0)).</li>
+<li>Run <code>enjoy_random.py</code> and compare performance of your trained model to random agent.</li>
+<li>Improve the performance of your agent. Can you reach 70% success rate? Things to think about:
+
+<ul>
+<li>Is your training data good? Remember, this model will follow your steps <strong>exactly</strong>.</li>
+<li>Did you overfit your model? You can detect this by having separate testing set (not trained on), or from too high accuracy during training.
+
+<ul>
+<li>If so, how to fight it? Core idea is to prevent model from memorizing each training sample.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+
+
+<p>If you have time, you can try same code on different ViZDoom scenarios. You can find bunch of them here:
+https://github.com/mwydmuch/ViZDoom/tree/master/scenarios</p>
