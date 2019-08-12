@@ -2,7 +2,6 @@
 using deep learning techniques to manipulate varied training sets 
 
 
-UEF Summerschool on deep reinforcement learning in video games, 2019
 
 This file contains instructions to setup environment for the practicals. We recommend using pre-made packages below if you are using Windows 10
 Pre-made packages for Windows 10
