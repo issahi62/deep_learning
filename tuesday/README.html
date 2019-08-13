@@ -1,0 +1,79 @@
+<h1>Tuesday practicals</h1>
+
+<p>Value functions: The crux of reinforcement learning.</p>
+
+<h2>Tasks</h2>
+
+<ol>
+<li>Study the agent-environment interaction, Gym API and environment at hand with <code>gym_discrete.py</code>
+
+<ul>
+<li>The &ldquo;step-loop&rdquo; is common way do to interaction. Implement this missing loop in <code>gym_discrete.py</code>. See this for documentation: <a href="https://gym.openai.com/">https://gym.openai.com/</a></li>
+<li>Run <code>gym_discrete.py</code> to see a random agent to play the environment &ldquo;FrozenLake-v0&rdquo;</li>
+<li>Get familiar with the environment. Important things you need to figure out:
+
+<ol>
+<li>What is the goal?</li>
+<li>What is the state information (what does the <code>state</code> from <code>env.step(action)</code> mean)?</li>
+<li>What are actions (what does the <code>action</code> in <code>env.step(action)</code> do)? What are the different actions?</li>
+<li>What is reward?</li>
+<li>What is the starting state? Does it change between different episodes (games)?</li>
+<li>Is environment deterministic or stochastic? Environment is deterministic if you can perfectly predict what happens with every action in every    state.</li>
+</ol>
+</li>
+</ul>
+</li>
+<li>Learn the value function of a random agent with <code>learn_random_v.py</code>.
+
+<ul>
+<li>You have to write code in <code>v_table.py</code>. This holds an implementation of table-based value function. There is one function that needs
+updating: <code>get_v(self)</code></li>
+<li>Run <code>learn_random_v.py</code>. The code visualizes the value function 10 times (with default settings), showing the value of each state in the game.</li>
+<li>How does the value function change over time?</li>
+<li>Change settings in <code>learn_random_v.py</code> to train longer (first hardcoded values), and train for 10 000 episodes.</li>
+<li>What do the dark spots (low value) in visualization correspond to in game?</li>
+<li>How about the bright spots (high value)? How do these relate to the reward of the game? Note: You get +1 reward when you step on goal spot.</li>
+<li>Why does the goal spot have low value?</li>
+<li>Study how discount factor affects the value function: By default this is 0.98. You can change this with <code>discount_factor</code> parameter when you create a VTable (e.g. <code>vtable = VTable(num_states, discount_factor=0.5</code>). Train new value functions with different discount factors and compare results.</li>
+</ul>
+</li>
+<li>Next, train Q-learning agent with <code>learn_q_agent.py</code>
+
+<ul>
+<li>Implement Q-learning update in <code>q_agent.py</code> file.</li>
+<li>Try training agent by running <code>learn_q_agent.py</code>. The script will print out number of episodes played and average success rate.</li>
+<li>Something should be wrong: Game is timing out. Whatever could be the reason? Perhaps something with the actions agent gives us?</li>
+<li>We are initializing all Q-values to zero at start of learning. Is this bad or good? (Note: What happens when you select action with argmax when all
+Q-values are zero?)
+
+<ul>
+<li>What could be better initial values (Note: It is something random)?</li>
+<li>In <code>q_agent.py</code>, change the initilization of <code>self.q</code> from strict value to something more random (See <a href="https://docs.scipy.org/doc/numpy-1.16.0/reference/routines.random.html"><code>np.random</code></a> package).</li>
+<li>Are you able to train the agent now?</li>
+<li>Another way is to initialize values to overly optimistic ones: Comment out the random initialization of Q-values, and try initializing agent with
+all Q-values being one.</li>
+<li>Train now. Does this work, and why?</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Use <code>learn_qagent_v.py</code> to learn value function of the Q-agent you just trained (saved in <code>q_table.npy</code>).
+
+<ul>
+<li>How do the values differ from your random agent? Why?</li>
+</ul>
+</li>
+<li>Extra things to try out if you have time:
+
+<ul>
+<li>Try changing environment to slippery (stochastic) one by changing <code>FrozenLakeEnv(is_slippery=False)</code> to <code>FrozenLakeEnv(is_slippery=True)</code>
+
+<ul>
+<li>How does this change the environment? Are you able to train your agent now?</li>
+</ul>
+</li>
+<li>You can find bunch of other Gym environments here: <a href="https://gym.openai.com/envs/">https://gym.openai.com/envs/</a>. See if you can make these codes work with other environments (you can create environments with <code>gym.make([name here])</code>.</li>
+</ul>
+</li>
+</ol>
+
