@@ -1,0 +1,162 @@
+<h1>Wednesday practicals</h1>
+
+<p>Deep reinforcement learning: Deep learning, meet reinforcement learning.</p>
+
+<p>Core idea is to train a deep Q network on Breakout Atari game.</p>
+
+<p>Note: We will use deterministic version of Breakout environment. Literature often reports performance on stochastic version (more realistic task).</p>
+
+<h2>Running the code</h2>
+
+<p>Only one file <code>atari_dqn.py</code> with different parameters. For full details command <code>python atari_dqn.py -h</code></p>
+
+<p>Examples:</p>
+
+<ul>
+<li>Train for 10 000 agent steps (calls to <code>env.step</code>): <code>python atari_dqn.py --steps 10000 path_where_to_store_model</code></li>
+<li>Enjoy trained model: <code>python atari_dqn.py --show --evaluate --limit-fps path_to_trained_model</code></li>
+<li>Evaluate trained model: <code>python atari_dqn.py --evaluate path_to_trained_model</code></li>
+<li>Store console output to a file <code>log.txt</code>: <code>python atari_dqn.py --log log.txt path_where_to_store_model</code>
+
+<ul>
+<li><strong>Note: Once you start properly training agents, it is a good idea to store these logs for future reference</strong></li>
+</ul>
+</li>
+</ul>
+
+
+<h2>Tasks</h2>
+
+<ol>
+<li>Start by filling in required parts to run the code:
+
+<ul>
+<li>Implement the network in <code>build_models</code></li>
+<li>Implement target-network update in <code>update_target_model</code></li>
+</ul>
+</li>
+<li>You can now study the environment with <code>--show</code> and <code>--limit-fps</code> arguments to show the game.
+
+<ul>
+<li>You can also print out rewards and actions after the <code>env.step(action)</code> for better view of the game.</li>
+<li>When does agent reward?</li>
+<li>What is one episode?</li>
+</ul>
+</li>
+<li>Try training the agent with <code>python atari_dqn.py --steps 3000 dummy_model</code>
+
+<ul>
+<li>What do the results look like? Good? Bad?</li>
+<li>What do you think is the problem (what was also problem with default Q-learning)?</li>
+</ul>
+</li>
+<li>Implement epsilon-greedy exploration in <code>get_action</code>
+
+<ul>
+<li>With probability EPSILON, take random action instead of the greedy action (already implemented in <code>get_action</code>)</li>
+<li>You can use fixed EPSILON. A small probability should do the trick (e.g. 10% or 5%)</li>
+<li>Try training again with <code>python atari_dqn.py --steps 3000 dummy_model</code></li>
+<li>What is different compared to previous run?</li>
+</ul>
+</li>
+<li>We are printing out very limited info. At the very least we should print out the loss of training.
+
+<ul>
+<li>Implement printing average loss
+
+<ul>
+<li>In supervised learning (recall Monday&rsquo;s imitation learning), loss tells how accurate the network is.</li>
+<li>This is not quite as straight-forward with Deep Q learning, <strong>but</strong> it still is a vital debugging tool to see
+if something is wrong with training the network</li>
+<li>Skip to the end of <code>main()</code> function where you can find our print messages. Include average loss
+of the episode in the print-out message.</li>
+</ul>
+</li>
+<li>Train agent with <code>python atari_dqn.py --steps 2000 dummy_model</code></li>
+<li>What does the loss look like? Does it decrease/increase? It should decrease in the longer run, and it should not explode (be high values above 1000)</li>
+<li>Something is wonky. Take a look at <code>update_model</code> and see if you can fix the problem with loss.</li>
+<li>Run agent with <code>python atari_dqn.py --steps 2000 dummy_model</code> again and see if loss seems more reasonable now</li>
+</ul>
+</li>
+<li>It is still hard to say if agent is improving to right direction or not. Implement more monitoring.
+
+<ul>
+<li>Implement tracking average reward
+
+<ul>
+<li>Class <code>collections.deque</code> creates a list with maximum size. If maximum size is reached, oldest element is dropped.</li>
+<li>Create a <code>deque</code> that stores episodic rewards from last 100 episodes (or less)</li>
+<li>After each episode, print out the average reward from last 100 episodes</li>
+</ul>
+</li>
+<li>We know what Q-values should be like (not negative, well above zero), so we can track that as well.
+
+<ul>
+<li>We can monitor if we are even going to right direction by printing average Q-value per episode. Implement this.</li>
+<li>For every episode, store the sum of all predicted Q-values and number of them (used to calculate average).</li>
+<li>Note that <code>get_action</code> function returns Q-values and the selected action.</li>
+<li>Print average Q-value after every episode.</li>
+</ul>
+</li>
+<li>Try training again with <code>python atari_dqn.py --steps 10000 dummy_model</code></li>
+<li>Does the monitoring tell you anything useful? Average episodic reward might not, but what about average Q-value?</li>
+</ul>
+</li>
+<li>Try &ldquo;optimistic exploration&rdquo; again by initializing Q-values to something high.
+
+<ul>
+<li>Not as trivial as setting all values in a table to specific value, since we work on networks.</li>
+<li>A simple and crude way to do this: Initialize weights (kernel) of the final layer (output layer) to zero and biases to one.
+
+<ul>
+<li>End result: Before updates, the Q-network will predict one for all states.</li>
+<li>See documentation for <a href="https://keras.io/layers/core/"><code>Dense</code> layers</a> for how to change initial values.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Try training agent for a longer time with <code>python atari_dqn.py --steps 50000 proper_model</code>
+
+<ul>
+<li>How high average reward did you get?</li>
+<li>Evaluate and enjoy the model after training. What are the subjective / objective results?
+
+<ul>
+<li>You can enjoy your agent with <code>python atari_dqn.py --evaluate --show --limit-fps proper_model</code></li>
+<li>You can evaluate your agent with <code>python atari_dqn.py --evaluate proper_model</code></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Try reaching higher average reward by tuning the exploration and other parameters.
+
+<ul>
+<li>With some tinkering, you should be able to get to reliable 4.0 average reward in under 100k training steps.</li>
+</ul>
+</li>
+</ol>
+
+
+<p>Extra things to try out:</p>
+
+<ul>
+<li>Visualize Q-values while enjoying using Matplotlib and interactive plots.</li>
+<li>Try the code on <code>BreakoutNoFrameskip-v4</code> environment (set with <code>--env</code> argument).
+
+<ul>
+<li>Same as <code>Breakout-v0</code>, but with &ldquo;sticky actions&rdquo;: With some probability, the next action is
+equal to previous action rather than the one given in <code>env.step(action)</code>.</li>
+</ul>
+</li>
+<li>Try the DQN code on different Atari game (e.g. Pong).</li>
+</ul>
+
+
+<p>Extra implementing:</p>
+
+<ul>
+<li>Implement Double DQN (modification to <code>update_model</code>): http://www0.cs.ucl.ac.uk/staff/d.silver/web/Applications_files/doubledqn.pdf</li>
+<li>Implement Dueling DQN (modification to <code>build_models</code>): https://arxiv.org/pdf/1511.06581.pdf</li>
+<li>Note that you can implement both together</li>
+</ul>
+
