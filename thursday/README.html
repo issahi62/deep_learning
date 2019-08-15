@@ -1,0 +1,151 @@
+<h1>Thursday (project)</h1>
+
+<p>Lots of work on policy gradients!</p>
+
+<p>Starting off with implementation on CartPole / other simpler environments (Thursday), and then moving on to Toribash (Friday)</p>
+
+<h2>Examples on using the code</h2>
+
+<ul>
+<li>Run for 10k steps: <code>python gym_policy_gradient.py</code></li>
+<li>Run for 100k steps and learn every 5k steps: <code>python gym_policy_gradient.py --max-steps 100000 --nsteps 5000</code></li>
+</ul>
+
+
+<h2>Tasks</h2>
+
+<ol>
+<li>Implement core interaction loop with the game in <code>play_game</code>
+
+<ul>
+<li>This function should play one full game in the environment and return the <em>trajectory</em></li>
+</ul>
+</li>
+<li>Implement visualizing agent performance over time with Matplotlib
+
+<ul>
+<li>In the main loop (in <code>main</code> function), store the episodic reward of all games (you can get this from the trajectory)</li>
+<li>After the main loop ends, use matplotlib to plot episodic reward against game number (game number on X-axis, episodic reward on Y-axis)</li>
+</ul>
+</li>
+<li>For convenience, use <code>tqdm</code> library to create a pretty progress bar of how far the training is
+
+<ul>
+<li>Create a progress bar (<code>tqdm.tqdm</code> object) with <code>total</code> being the number of steps we are going to train for</li>
+<li>After every <code>play_game</code>, update the progress bar by how many steps it lasted (i.e. the number of elements in trajectory)</li>
+</ul>
+</li>
+<li>Run the random agent on the environment with <code>python gym_policy_gradient.py</code>
+
+<ul>
+<li>Again, use printing and <code>env.render()</code> to see what the environment is like (the task, the starting point, when it ends, etc)</li>
+</ul>
+</li>
+<li>Implement periodic learning: After N amount of steps (<code>args.nsteps</code>), the agent should receive the current trajectories and learn from them
+
+<ul>
+<li>Implement this to the end of the main loop</li>
+</ul>
+</li>
+<li>Implement small neural network for our policy gradient agent in <code>PGAgentMC._build_network</code></li>
+<li>Implement getting action from our policy gradient agent in <code>PGAgentMC.step</code></li>
+<li>Run the <code>PGAgentMC</code> on the environment with <code>python gym_policy_gradient.py</code>
+
+<ul>
+<li>You can change agent in <code>main</code> function before the main loop</li>
+<li>How does the agent behave?</li>
+</ul>
+</li>
+<li>Implement handling of the trajectories
+
+<ul>
+<li>See <code>PGAgentMC.learn</code> and fill in the missing parts.</li>
+</ul>
+</li>
+<li>Implementing the core policy update
+
+<ul>
+<li>See <code>PGAgentMC._build_update_operation</code>. Fill in the missing parts.</li>
+</ul>
+</li>
+<li>Hope everything works now! Run your fully implemented agent with <code>python gym_policy_gradient.py</code>
+
+<ul>
+<li>Your learning curve should wave around like previously, but over time it goes down.</li>
+<li>Wait what? That wasn&rsquo;t supposed to happen!</li>
+<li>Debugging time:
+
+<ul>
+<li>Recal that the policy gradient objective (&ldquo;\pi * R&rdquo;) is supposed to be MAXIMIZED.</li>
+<li>But tensorflow optimizers MINIMIZE the loss you give them (i.e. the &ldquo;\pi * R&rdquo;).</li>
+<li>Asdf we are learning the complete opposite!</li>
+<li>How can you fix this? It only takes on more character in the line that creates the &ldquo;loss&rdquo;</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Fix the above bug and run <code>python gym_policy_gradient.py</code> again.
+
+<ul>
+<li>Any progress in any direction?</li>
+</ul>
+</li>
+<li>Note that the environment gives bunch of reward, and our networks do not like big values to either direction.
+
+<ul>
+<li>Implement return normalization to fix this:
+
+<ul>
+<li>In <code>learn</code> function, after all returns have been computed, normalize them to have zero mean and standard deviation of one.
+
+<ul>
+<li>From every return, substract the mean of returns and then divide by standard deviation.</li>
+</ul>
+</li>
+<li>This is called &ldquo;standard score&rdquo; in statistics.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Try running the agent again with <code>python gym_policy_gradient.py</code>
+
+<ul>
+<li>Did the results improve?</li>
+</ul>
+</li>
+<li>Try running agent longer and/or with different hyper parameters, learning rates and such.
+
+<ul>
+<li>How fast can you learn? Can you get to stable 500 score?</li>
+<li>Can you somehow get rid of the variance in the episodic reward?</li>
+</ul>
+</li>
+</ol>
+
+
+<p>As an end-result you should be able to reach episodic reward 500 in some games after 100 000 steps with update every 500 steps (the default parameters).</p>
+
+<p>Extra things to do:</p>
+
+<ul>
+<li>Implement an advantage actor critic (A2C):
+
+<ul>
+<li>Create another Keras model for estimating the value (map observation to return).</li>
+<li>Instead of using returns in the update rule, use advantages.
+
+<ul>
+<li>Advantage is <code>returns - values</code>. You get values with the another model</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Implement decaying learning rate
+
+<ul>
+<li>A common way to start fast and fine-tune in the end. Start from high learning rate and
+decay to very small learning rate towards the end of the training.</li>
+</ul>
+</li>
+</ul>
+
