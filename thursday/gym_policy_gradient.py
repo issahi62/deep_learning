@@ -6,8 +6,8 @@
 from argparse import ArgumentParser
 import random
 import numpy as np
-import matplotlib
-matplotlib.use("TkAgg")
+#import matplotlib
+#matplotlib.use("TkAgg")
 from matplotlib import pyplot as pt
 import keras
 import tensorflow as tf
