@@ -1,0 +1,96 @@
+<h1>Friday (project)</h1>
+
+<p>Lots of work on policy gradients!</p>
+
+<p>Starting off with implementation on CartPole / other simpler environments (Thursday), and then moving on to Toribash (Friday)</p>
+
+<h2>Examples on using the code</h2>
+
+<ul>
+<li>Run for 1k steps: <code>python toribash_policy_gradient.py</code></li>
+<li>Run and show gameplay: <code>python toribash_policy_gradient.py --show</code></li>
+<li>Run for 100k steps and learn every 5k steps: <code>python toribash_policy_gradient.py --max-steps 100000 --nsteps 5000</code></li>
+</ul>
+
+
+<h2>Tasks</h2>
+
+<ol>
+<li>Update <code>RandomAgent</code> to work with the new environment (the <code>step</code> function).
+
+<ul>
+<li>Note the different action space: Instead of single integer value, we now need bunch of them.</li>
+<li>See this documentation for more information: <a href="https://github.com/openai/gym/blob/master/gym/spaces/multi_discrete.py">https://github.com/openai/gym/blob/master/gym/spaces/multi_discrete.py</a></li>
+<li><strong>It is important to understand how these actions work next steps! </strong></li>
+</ul>
+</li>
+<li>Launch game with <code>python toribash_policy_gradient.py --show --max-steps 200 --nsteps 500</code> (note: <code>env.render()</code> does not work here)
+
+<ul>
+<li>Once more, study how the environment works: What are the observations, what are the actions, what is the reward and when game ends?</li>
+</ul>
+</li>
+<li>Change agent to <code>PGAgentMC</code> and start filling the new holes.
+
+<ul>
+<li>This will be rough, take your time digesting these.</li>
+</ul>
+</li>
+<li>Fill in <code>_build_network</code> with a network suitable for multi-discrete action space.
+
+<ul>
+<li><strong>You can assume the multi-discrete action space is always of shape 22 x 4 (22 discrete variables, each with 4 possible values)</strong></li>
+</ul>
+</li>
+<li>Fill in <code>step</code> function to return new type of action according model</li>
+<li>Run your code <code>python toribash_policy_gradient.py --show --max-steps 200 --nsteps 500</code> to validate functionality of the above functions.</li>
+<li>Implement saving and loading model in <code>PGAgentMC</code>:
+
+<ul>
+<li>If <code>args.save_model</code> is given (not None), then at the end of training agent&rsquo;s Keras model should be stored in the path given
+in <code>args.save_model</code>.</li>
+<li>If <code>args.load_model</code> is given (not None), then the <code>PGAgentMC</code> agent should load model from path <code>args.load_model</code>
+instead of using <code>_build_network</code>.</li>
+</ul>
+</li>
+<li>Fill in <code>_build_update_operation</code> to work with the multi-discrete action space</li>
+<li>Run <code>python toribash_policy_gradient.py --save-model trained_model</code> to train your agent
+
+<ul>
+<li>If everything went correctly, you should see some level of improvement over time.</li>
+</ul>
+</li>
+<li>Enjoy your agent with <code>python toribash_policy_gradient.py --load-model trained_model --max-steps 200 --nsteps 500</code></li>
+<li>Improve the agent! Lets see who can come up most impressive Uke Destroyer.
+
+<ul>
+<li>Rules: The original Toribash settings (that were in the file)</li>
+<li>Things to modify and try out:
+
+<ul>
+<li>Save more models than the one at end of training:
+
+<ul>
+<li>Keep track of when agent is doing good (e.g. had high reward in last 10 episodes), and save
+models when they get high enough</li>
+</ul>
+</li>
+<li>More training (<code>--max-steps</code>). Note that this does not work if agent is too unstable / does not explore enough.</li>
+<li>Different amount of steps per training (<code>--nsteps</code>)</li>
+<li>Different optimizer in <code>_build_update_operation</code>. Another good one is <code>tf.train.AdamOptimizer</code></li>
+<li>Different learning rates in the optimizer</li>
+<li>Different network architectures (larger is not necessarily better)</li>
+<li>Using deterministic policy rather than stochastic one (instead of randomly taking actions, take action with highest probability</li>
+<li>Add exploration:
+
+<ul>
+<li>You can not use epsilon-greedy actions here (goes against the theory)</li>
+<li>Common way is to compute entropy of action probabilites and maximize that (i.e. another loss in tensorflow graph)</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+
